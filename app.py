@@ -185,7 +185,3 @@ async def simulate_workload(seconds: Optional[int] = 1):
         logging.error(f"Workload simulation failed: {e}")
         raise HTTPException(status_code=500, detail=f"Workload simulation failed: {e}")
 
-# Run the app
-if __name__ == "__main__":
-    logging.basicConfig(level=logging.INFO)
-    uvicorn.run(app, host="0.0.0.0", port=8000)
