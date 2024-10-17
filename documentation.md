@@ -2,125 +2,118 @@
 
 **Welcome to the Iris Flower Classification API!**
 
-This API allows you to predict the species of an iris flower based on its sepal and petal measurements. It's built using FastAPI and leverages a pre-trained Support Vector Classifier (SVC) model.
+This API predicts the species of an iris flower based on its sepal and petal measurements. It's built using FastAPI and powered by a pre-trained Support Vector Classifier (SVC) model.
 
 ### Features
 
-* **Predict Iris Species:**  Classify an iris flower into one of three species: setosa, versicolor, or virginica. ([/predict](/predict))
-* **Batch Prediction:**  Classify multiple iris flowers in a single request. ([/predict_batch](/predict_batch))
-* **Random Prediction:** Get a random iris flower prediction along with its features. ([/predict_random](/predict_random))
-* **Health Check:** Verify the API is running smoothly. ([/health](/health))
-* **Model Information:** Learn more about the underlying model used for prediction. ([/model_info](/model_info))
-* **Workload Simulation:** Simulate workload for testing purposes. ([/simulate_workload](/simulate_workload))
-
-### Installation
-
-1. **Prerequisites:** Ensure you have Python 3.6 or later installed on your system. You can check by running `python --version` in your terminal.
-2. **Install dependencies:** Clone or download this repository and run the following command in your terminal:
-
-```bash
-pip install -r requirements.txt
-```
+- **Predict Iris Species:** Classifies an iris flower into one of three species: *Setosa*, *Versicolor*, or *Virginica*. ([/predict](/predict))
+- **Batch Prediction:** Classify multiple iris flowers in a single request. ([/predict_batch](/predict_batch))
+- **Random Prediction:** Provides a random iris flower's measurements and predicts its species. ([/predict_random](/predict_random))
+- **Health Check:** Confirms that the API is running as expected. ([/health](/health))
+- **Model Information:** Retrieves details about the model used for predictions. ([/model_info](/model_info))
+- **Workload Simulation:** Simulates load for performance testing. ([/simulate_workload](/simulate_workload))
 
 ### Usage
 
-**1. Start the API server:**
+#### 1. Start the API Server
 
+To start the API server on port 8000, run:
 ```bash
 uvicorn main:app --host 0.0.0.0 --port 8000
 ```
+You can interact with the API via tools like Postman, `curl`, or a browser.
 
-This will start the API server on port 8000 by default. You can access the API endpoints using tools like Postman, curl, or directly through your browser.
+#### 2. API Endpoints
 
-**2. Prediction endpoints:**
+- **Single Flower Prediction:**
+   Submit a flower's sepal and petal measurements to predict its species.
+   ```http
+   POST /predict
+   Content-Type: application/json
 
-- **Predict single iris:**
+   {
+     "sepal_length": 5.1,
+     "sepal_width": 3.5,
+     "petal_length": 1.4,
+     "petal_width": 0.2
+   }
+   ```
 
-```
-POST /predict
-Content-Type: application/json
+   **Response:**
+   ```json
+   {
+     "prediction": "setosa",
+     "code_signature": "..."
+   }
+   ```
 
-{
-  "sepal_length": 5.1,
-  "sepal_width": 3.5,
-  "petal_length": 1.4,
-  "petal_width": 0.2
-}
-```
+- **Batch Prediction:**
+   Predict species for multiple iris flowers in one request.
+   ```http
+   POST /predict_batch
+   Content-Type: application/json
 
-**Response:**
+   {
+     "features": [
+       {
+         "sepal_length": 5.1,
+         "sepal_width": 3.5,
+         "petal_length": 1.4,
+         "petal_width": 0.2
+       },
+       {
+         "sepal_length": 4.9,
+         "sepal_width": 3.0,
+         "petal_length": 1.4,
+         "petal_width": 0.2
+       }
+     ]
+   }
+   ```
 
-```json
-{
-  "prediction": "setosa",
-  "code_signature": "..."
-}
-```
+   **Response:**
+   ```json
+   {
+     "predictions": ["setosa", "setosa"],
+     "code_signature": "..."
+   }
+   ```
 
-- **Batch prediction:**
+- **Random Prediction:**
+   Get random sepal and petal measurements and the corresponding species prediction.
+   ```http
+   GET /predict_random
+   ```
 
-```
-POST /predict_batch
-Content-Type: application/json
+   **Response:**
+   ```json
+   {
+     "random_features": {
+       "sepal_length": 5.32,
+       "sepal_width": 3.18,
+       "petal_length": 1.54,
+       "petal_width": 0.42
+     },
+     "prediction": "versicolor",
+     "code_signature": "..."
+   }
+   ```
 
-{
-  "features": [
-    {
-      "sepal_length": 5.1,
-      "sepal_width": 3.5,
-      "petal_length": 1.4,
-      "petal_width": 0.2
-    },
-    {
-      "sepal_length": 4.9,
-      "sepal_width": 3.0,
-      "petal_length": 1.4,
-      "petal_width": 0.2
-    }
-  ]
-}
-```
+#### 3. Other Endpoints
 
-**Response:**
+- **Health Check:**  
+   Access `/health` to verify if the API is operational.
 
-```json
-{
-  "predictions": ["setosa", "setosa"],
-  "code_signature": "..."
-}
-```
+- **Model Information:**  
+   View details about the prediction model via `/model_info`.
 
-- **Random prediction:**
-
-```
-GET /predict_random
-```
-
-**Response:**
-
-```json
-{
-  "random_features": {
-    "sepal_length": 5.32,
-    "sepal_width": 3.18,
-    "petal_length": 1.54,
-    "petal_width": 0.42
-  },
-  "prediction": "versicolor",
-  "code_signature": "..."
-}
-```
-
-**3. Other endpoints:**
-
-* **Health Check:** Access `/health` for a simple health check response.
-* **Model Information:** Access `/model_info` to learn about the model used for prediction.
-* **Workload Simulation:** Use `/simulate_workload?seconds={duration}` to simulate workload for a specified duration (in seconds). This is helpful for testing API performance under load.
+- **Workload Simulation:**  
+   Simulate workload with `/simulate_workload?seconds={duration}` to test performance.
 
 ### Contributing
 
-We welcome contributions to this project! Feel free to fork the repository, make changes, and submit pull requests.
+Contributions are welcome! Feel free to fork the repository, submit your changes, and create pull requests.
 
 ### License
 
-This project is licensed under the MIT License. See the `LICENSE` file for details.
+This project is licensed under the MIT License. See the `LICENSE` file for more details.
